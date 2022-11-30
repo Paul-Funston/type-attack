@@ -33,6 +33,9 @@ const restartBtn = select('.restart');
 const timerDisplay = select('.time');
 const pointsDisplay = select('.points');
 const targetDisplay = select('.target');
+const playerWordInput = select('.player-word');
+
+
 let points = 0;
 let time = 99;
 let interval;
@@ -42,11 +45,14 @@ let target;
 
 onEvent('click', startBtn, () => {
   startGame();
+  toggleModal();
 });
 
 onEvent('click', restartBtn, () => {
   startGame();
-})
+});
+
+onEvent('keyup', playerWordInput, checkWord)
 
 function startGame() {
   time = 99;
@@ -60,6 +66,7 @@ function startGame() {
   }
 
   timerDisplay.innerHTML = `<p> ${time}</p>`;
+  pointsDisplay.innerHTML = `<p> ${points}</p>`;
 
   newDictionary();
   startTimer();
@@ -69,12 +76,13 @@ function startGame() {
   //hide startBtn/score
 }
 
-
-
 function gameTimeout() {
   clearInterval(interval);
-  //  displayScore(score tryAgain)
-  stopBGM()
+  let now = new Date();
+  let percentage = points / dictionary.length;
+  let score = new Score(now, points, percentage);
+  displayScore(score);
+  stopBGM();
 }
 
 function resetGame() {
@@ -94,17 +102,21 @@ function stopBGM() {
 }
 
 function checkWord() {
-  // isInputCorrect()
-  // nextWord()
-  // clearInput
-  // playFX() 
+  let playerWord = playerWordInput.value.toString().trim().toLowerCase();
+  let targetWord = target.toString().trim().toLowerCase();
+
+  if (playerWord === targetWord) {
+    nextWord();
+    playerWordInput.value = '';
+    points++;
+    pointsDisplay.innerHTML = `<p> ${points}</p>`;   
+    // playFX() 
+  }
 }
 
 function nextWord() {
-  // same as loadWord or call loadWord()?
   target = activeDictionary.pop().toLowerCase();
   targetDisplay.innerHTML = `<p>${target.toUpperCase()}</p>`;
-
 }
 
 
@@ -122,3 +134,9 @@ function startTimer() {
   }, 1000)
   timeout = setTimeout(gameTimeout, 100000);
 }
+
+function displayScore(score) {
+  toggleModal();
+}
+
+function toggleModal() {}
