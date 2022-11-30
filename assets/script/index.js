@@ -32,9 +32,12 @@ const startBtn = select('.start');
 const restartBtn = select('.restart');
 const timerDisplay = select('.time');
 const pointsDisplay = select('.points');
+const targetDisplay = select('.target');
 let points = 0;
 let time = 99;
-let interval,timeout,percentage;
+let interval;
+let timeout;
+let target;
 
 
 onEvent('click', startBtn, () => {
@@ -42,37 +45,41 @@ onEvent('click', startBtn, () => {
 });
 
 onEvent('click', restartBtn, () => {
-  stopBGM();
   startGame();
 })
 
 function startGame() {
   time = 99;
   points = 0;
-  if (startBtn.value === 'Start') {
-    startBtn.value = 'Try Again';
+  if (startBtn.innerHTML === 'Start') {
+    startBtn.innerHTML = 'Try Again';
+      // display gameinfo(timer points)
+      //change modal result
   } else {
     resetGame();
   }
-  // if button says start change value to Try Again, else resetGame()
+
+  timerDisplay.innerHTML = `<p> ${time}</p>`;
+
   newDictionary();
   startTimer();
-  // display gameinfo(timer points)
   playBGM();
+  nextWord();
+  //focus input
+  //hide startBtn/score
 }
 
 
 
 function gameTimeout() {
-  interval.clearInterval();
+  clearInterval(interval);
   //  displayScore(score tryAgain)
   stopBGM()
 }
 
 function resetGame() {
-  interval.clearInterval();
-  timeout.clearTimeout();
-  
+  clearInterval(interval);
+  clearTimeout(timeout);
   stopBGM();
   
 }
@@ -95,6 +102,9 @@ function checkWord() {
 
 function nextWord() {
   // same as loadWord or call loadWord()?
+  target = activeDictionary.pop().toLowerCase();
+  targetDisplay.innerHTML = `<p>${target.toUpperCase()}</p>`;
+
 }
 
 
@@ -106,8 +116,9 @@ function newDictionary() {
 
 function startTimer() {
   interval = setInterval(function() {
-    --time
-    timerDisplay.innerHTML = `<p> ${time}</p>`
+    --time;
+    timerDisplay.innerHTML = `<p> ${time}</p>`;
+
   }, 1000)
-  timeout = setTimeout(gameTimeout, 99000)
+  timeout = setTimeout(gameTimeout, 100000);
 }
