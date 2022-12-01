@@ -1,4 +1,5 @@
 @import "./reset.css";
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&family=Source+Sans+Pro:wght@400;600;700&family=Zen+Dots&display=swap');
 
 :root {
   --primary-color: ;
@@ -11,6 +12,11 @@
 
 p, h1, h2, h3, h4, h5, h6, i {
   color: rgb(211 148 0);
+}
+
+.status *, .target *, h1 {
+  font-family: 'Zen Dots', cursive;
+  font-weight: 400;
 }
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
@@ -74,14 +80,15 @@ header .restart {
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  font-size: 3rem;
+  font-size: 2rem;
   min-height: 300px;
-  min-width: 325px ;
+  min-width: 400px ;
   height: 25%;
   width: 25%;
   display: grid;
   place-items: center;
   visibility: hidden;
+  z-index: 2222;
 }
 
 .target p {
