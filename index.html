@@ -23,19 +23,29 @@
         <button class="restart"><i class="fa-solid fa-arrow-rotate-left"></i></button>
       </header>
       <main>
-        <div class="grid-container">
+        <div class="wrapper game">
           <div class="status">
-            <div class="time"><p>99</p></div>
-            <div class="points"><p>0</p></div>
+            <div class="time">
+              <p>99</p>
+            </div>
+            <div class="points">
+              <p>0</p>
+            </div>
           </div>
-          <div class="target">
-            
+          <div class="grid-container">
+
+            <div class="target">
+              <p></p>
+            </div>
+            <form>
+              <input type="text" class="player-word">
+            </form>
           </div>
-          <form>
-            <input type="text" class="player-word">
-          </form>
-          <div class="modal result">
-            <div class="score"></div>
+        
+        </div>
+
+        <div class="modal result">
+          <div class="score">
             <button class="start">Start</button>
           </div>
         </div>

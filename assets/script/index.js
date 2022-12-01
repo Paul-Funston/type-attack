@@ -25,21 +25,24 @@ const dictionary = ['dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'build
 'keyboard', 'window'];
 
 let activeDictionary = [];
-const backgroundMusic = new Audio('./assets/media/Ludum Dare 28 - Track 8.wav');
+const backgroundMusic = new Audio('./assets/media/bgm.wav');
 backgroundMusic.type = 'audio/wav';
 
 const startBtn = select('.start');
 const restartBtn = select('.restart');
+const statusDisplay = select('.status');
 const timerDisplay = select('.time');
 const pointsDisplay = select('.points');
 const targetDisplay = select('.target');
 const playerWordInput = select('.player-word');
-
+const resultDisplay = select('.score');
+const resultModal = select('.result');
 
 let points = 0;
 let time = 99;
 let interval;
 let timeout;
+let timeoutAnimation;
 let target;
 
 
@@ -52,14 +55,19 @@ onEvent('click', restartBtn, () => {
   startGame();
 });
 
-onEvent('keyup', playerWordInput, checkWord)
+onEvent('keyup', playerWordInput, function() {
+  if (time > 0) {
+    checkWord();
+  }
+})
 
 function startGame() {
   time = 99;
   points = 0;
   if (startBtn.innerHTML === 'Start') {
     startBtn.innerHTML = 'Try Again';
-      // display gameinfo(timer points)
+    statusDisplay.style.visibility = 'visible';
+    targetDisplay.style.visibility = 'visible';
       //change modal result
   } else {
     resetGame();
@@ -72,7 +80,7 @@ function startGame() {
   startTimer();
   playBGM();
   nextWord();
-  //focus input
+  playerWordInput.focus();
   //hide startBtn/score
 }
 
@@ -83,6 +91,7 @@ function gameTimeout() {
   let score = new Score(now, points, percentage);
   displayScore(score);
   stopBGM();
+  toggleModal();
 }
 
 function resetGame() {
@@ -106,10 +115,14 @@ function checkWord() {
   let targetWord = target.toString().trim().toLowerCase();
 
   if (playerWord === targetWord) {
-    nextWord();
+    targetDisplay.classList.remove('grow');
+
     playerWordInput.value = '';
     points++;
     pointsDisplay.innerHTML = `<p> ${points}</p>`;   
+    nextWord();
+
+
     // playFX() 
   }
 }
@@ -117,6 +130,13 @@ function checkWord() {
 function nextWord() {
   target = activeDictionary.pop().toLowerCase();
   targetDisplay.innerHTML = `<p>${target.toUpperCase()}</p>`;
+  targetDisplay.firstElementChild.classList.add('flash');
+
+  timeoutAnimation = setTimeout(function() {
+    targetDisplay.classList.add('grow');
+    targetDisplay.firstElementChild.classList.remove('flash');
+
+  }, 200)
 }
 
 
@@ -136,7 +156,16 @@ function startTimer() {
 }
 
 function displayScore(score) {
+  let hits = score.hits;
+  let percent = score.percent;
+  let date = score.date;
+  percent = Math.trunc(percent * 100);
+  date = date.toDateString().slice(4, 15);
+  resultDisplay.innerHTML = `<p>${hits} Hits!</p> <p>${percent}%</p>`;
   toggleModal();
+
 }
 
-function toggleModal() {}
+function toggleModal() {
+  resultModal.classList.toggle('hidden');
+}
