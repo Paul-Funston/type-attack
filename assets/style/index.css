@@ -76,13 +76,18 @@ header .restart {
   background-repeat: no-repeat;
   font-size: 3rem;
   min-height: 300px;
-  min-width: 300px ;
+  min-width: 325px ;
   height: 25%;
   width: 25%;
   display: grid;
   place-items: center;
   visibility: hidden;
+}
 
+.target p {
+   -webkit-user-select: none;
+      -moz-user-select: none;
+           user-select: none;
 }
 
 .target.grow {
@@ -118,7 +123,7 @@ form {
 
 form .player-word {
   position: absolute;
-  bottom: 125px;
+  bottom: 115px;
   left: calc((50vw - 75px));
   width: 150px;
   font-size: 20px;
@@ -135,9 +140,13 @@ form .player-word {
 }
 
 .form-ship img {
-  height: 35vh;
-  width: 350px;
+  height: 250px;
+  width: 300px;
   padding-bottom: 1rem;
+}
+
+.form-ship figure {
+  visibility: hidden;
 }
 
 
@@ -175,7 +184,6 @@ div.score {
   font-size: 24px;
   font-weight: 600;
   padding: 2rem;
-  /* background-image: url(../media/station.png); */
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
@@ -194,6 +202,43 @@ div.score > p + p {
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 
 .laser {
-  position: fixed;
-  bottom: 35vh;
+  position: absolute;
+  bottom: 265px;
+  left: calc(50vw - 3px);
+  width: 6px;
+  height: 12px;
+  animation: shootLaser 1s linear 1;
+  background-color: lime;
+  z-index: 9999;
 }
+
+@keyframes shootLaser {
+  from {bottom: 265px;}
+  to {bottom: 60vh;}
+}
+
+.fly-away {
+  animation: flyaway 2s ease-in forwards;
+}
+
+.fly-in {
+  animation: flyin 1s linear backwards;
+}
+
+@keyframes flyaway {
+  from {
+    transform: scale(1);
+    translate: none;
+  }
+  to {
+    transform: scale(0);
+    translate: 0 -100vh;
+  }
+}
+
+@keyframes flyin {
+  from {translate: 0 400px;}
+  to {translate: none;}
+}
+
+

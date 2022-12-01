@@ -45,6 +45,7 @@ const targetDisplay = select('.target');
 const playerWordInput = select('.player-word');
 const resultDisplay = select('.score');
 const resultModal = select('.result');
+const spaceShip = select('.form-ship figure');
 
 let points = 0;
 let time = gameTime;
@@ -87,7 +88,7 @@ function startGame() {
   targetDisplay.style.visibility = 'visible';
   timerDisplay.innerHTML = `<p> ${time}</p>`;
   pointsDisplay.innerHTML = `<p> ${points}</p>`;
-
+  flyIn();
   newDictionary();
   startTimer();
   playBGM();
@@ -106,6 +107,7 @@ function gameTimeout() {
   displayScore(score);
   highscores.push(score);
   stopBGM();
+  flyAway();
 
   targetDisplay.style.visibility = 'hidden';
   toggleModal();
@@ -194,4 +196,29 @@ function fireLaser(keycode) {
     shootLaser.play();
   }
 
+  let laser = document.createElement("div");
+  laser.classList = "laser";
+  select('form').append(laser);
+
+  setTimeout(function() {
+    laser.remove();
+  }, 1000);
+
+}
+
+function flyAway() {
+  engineOn();
+  spaceShip.classList.add('fly-away');
+}
+
+function flyIn() {
+  engineOn();
+  spaceShip.classList = 'fly-in';
+  spaceShip.style.visibility = 'visible';
+}
+
+function engineOn() {
+  const engine = new Audio('./assets/media/flame.mp3');
+  engine.type = 'audio.mp3';
+  engine.play();
 }
