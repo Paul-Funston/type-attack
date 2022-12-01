@@ -77,7 +77,7 @@ header .restart {
   font-size: 3rem;
   min-height: 300px;
   min-width: 300px ;
-  height: 100%;
+  height: 25%;
   width: 25%;
   display: grid;
   place-items: center;
@@ -97,15 +97,49 @@ header .restart {
 }
 
 @keyframes grow {
-  0% {width: 25%;}
-  10% {width: 50%;}  
-  100% {width: 100%;}
+  0% {width: 25%; height: 25%;}
+  10% {width: 50%; height: 50%;}  
+  100% {width: 100%; height: 100%;}
 }
 
 @keyframes flash {
   0% {color: rgb(255 255 255);}
   100% {color: rgb(var(--app-primary-color));}
 }
+
+form {
+
+  height: 100%;
+  width: 100%;
+  text-align: center;
+  z-index: 2333;
+
+}
+
+form .player-word {
+  position: absolute;
+  bottom: 125px;
+  left: calc((50vw - 75px));
+  width: 150px;
+  font-size: 20px;
+  text-align: center;
+  background-color: rgb(0 0 0 / 0);
+}
+
+.form-ship{
+  position: absolute;
+  bottom: 1rem;
+  display: grid;
+  place-items: center;
+  width: 100%;
+}
+
+.form-ship img {
+  height: 35vh;
+  width: 350px;
+  padding-bottom: 1rem;
+}
+
 
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
 /*  Modal                                                                    */
@@ -116,10 +150,50 @@ header .restart {
   inset: 0;
   display: grid;
   place-items: center;
+  gap: 1rem;
   visibility: visible;
   grid-template-columns: 1fr
 }
 
 .modal.hidden {
   visibility: hidden;
+}
+
+button.start {
+  background-image: url(../media/StartPlay.png);
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: rgb(0 0 0 / 0);
+  height: 66px;
+  width: 180px;
+  border-radius: 20px;
+}
+
+div.score {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  padding: 2rem;
+  /* background-image: url(../media/station.png); */
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+
+div.score p {
+  color: rgb(190 255 198);
+}
+
+div.score > p + p {
+  padding-bottom: 2rem;
+}
+
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+/*  Other Animations                                                         */
+/* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */
+
+.laser {
+  position: fixed;
+  bottom: 35vh;
 }

@@ -25,9 +25,17 @@ const dictionary = ['dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'build
 'keyboard', 'window'];
 
 let activeDictionary = [];
+let highscores = [];
+
 const backgroundMusic = new Audio('./assets/media/bgm.wav');
 backgroundMusic.type = 'audio/wav';
 
+const swoosh = new Audio('./assets/media/Swooosh.wav');
+swoosh.type = 'audio/wav';
+
+
+
+const gameTime = 10;  // How long is a round in seconds
 const startBtn = select('.start');
 const restartBtn = select('.restart');
 const statusDisplay = select('.status');
@@ -39,7 +47,7 @@ const resultDisplay = select('.score');
 const resultModal = select('.result');
 
 let points = 0;
-let time = 99;
+let time = gameTime;
 let interval;
 let timeout;
 let timeoutAnimation;
@@ -55,24 +63,28 @@ onEvent('click', restartBtn, () => {
   startGame();
 });
 
-onEvent('keyup', playerWordInput, function() {
+onEvent('keyup', playerWordInput, function(event) {
   if (time > 0) {
     checkWord();
+    fireLaser(event.keyCode);
   }
 })
 
 function startGame() {
-  time = 99;
+  time = gameTime;
   points = 0;
+  targetDisplay.classList.remove('grow');
+
   if (startBtn.innerHTML === 'Start') {
     startBtn.innerHTML = 'Try Again';
     statusDisplay.style.visibility = 'visible';
-    targetDisplay.style.visibility = 'visible';
+    resultDisplay.style.backgroundImage = 'url(./assets/media/station.png)';
       //change modal result
   } else {
     resetGame();
   }
 
+  targetDisplay.style.visibility = 'visible';
   timerDisplay.innerHTML = `<p> ${time}</p>`;
   pointsDisplay.innerHTML = `<p> ${points}</p>`;
 
@@ -80,7 +92,9 @@ function startGame() {
   startTimer();
   playBGM();
   nextWord();
+  playerWordInput.value = '';
   playerWordInput.focus();
+
   //hide startBtn/score
 }
 
@@ -90,8 +104,13 @@ function gameTimeout() {
   let percentage = points / dictionary.length;
   let score = new Score(now, points, percentage);
   displayScore(score);
+  highscores.push(score);
   stopBGM();
+
+  targetDisplay.style.visibility = 'hidden';
   toggleModal();
+  targetDisplay.classList.remove('grow');
+
 }
 
 function resetGame() {
@@ -116,14 +135,11 @@ function checkWord() {
 
   if (playerWord === targetWord) {
     targetDisplay.classList.remove('grow');
-
+    swoosh.play();
     playerWordInput.value = '';
     points++;
     pointsDisplay.innerHTML = `<p> ${points}</p>`;   
     nextWord();
-
-
-    // playFX() 
   }
 }
 
@@ -152,7 +168,7 @@ function startTimer() {
     timerDisplay.innerHTML = `<p> ${time}</p>`;
 
   }, 1000)
-  timeout = setTimeout(gameTimeout, 100000);
+  timeout = setTimeout(gameTimeout, ((gameTime + 1) * 1000));
 }
 
 function displayScore(score) {
@@ -162,10 +178,20 @@ function displayScore(score) {
   percent = Math.trunc(percent * 100);
   date = date.toDateString().slice(4, 15);
   resultDisplay.innerHTML = `<p>${hits} Hits!</p> <p>${percent}%</p>`;
-  toggleModal();
-
+  resultDisplay.append(startBtn);
 }
 
 function toggleModal() {
   resultModal.classList.toggle('hidden');
+}
+
+
+function fireLaser(keycode) {
+  if (keycode >= 65 && keycode < 97) {
+    const shootLaser = new Audio('./assets/media/laser.mp3');
+    shootLaser.type = 'audio/mp3';
+    shootLaser.playbackRate = 4;
+    shootLaser.play();
+  }
+
 }
