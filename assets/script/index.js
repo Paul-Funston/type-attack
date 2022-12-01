@@ -35,7 +35,7 @@ swoosh.type = 'audio/wav';
 
 
 
-const gameTime = 10;  // How long is a round in seconds
+const gameTime = 99;  // How long is a round in seconds
 const startBtn = select('.start');
 const restartBtn = select('.restart');
 const statusDisplay = select('.status');
@@ -74,9 +74,9 @@ onEvent('keyup', playerWordInput, function(event) {
 function startGame() {
   time = gameTime;
   points = 0;
-  targetDisplay.classList.remove('grow');
 
   if (startBtn.innerHTML === 'Start') {
+    // initializing for first play
     startBtn.innerHTML = 'Try Again';
     statusDisplay.style.visibility = 'visible';
     resultDisplay.style.backgroundImage = 'url(./assets/media/station.png)';
@@ -85,18 +85,25 @@ function startGame() {
     resetGame();
   }
 
+  flyIn();
+  activateGameElements();
+
+  nextWord();
+}
+
+function activateGameElements() {
+  playerWordInput.value = '';
+  playerWordInput.style.visibility = 'visible';
+  playerWordInput.focus();
+
   targetDisplay.style.visibility = 'visible';
+  targetDisplay.classList.remove('grow');
+
   timerDisplay.innerHTML = `<p> ${time}</p>`;
   pointsDisplay.innerHTML = `<p> ${points}</p>`;
-  flyIn();
   newDictionary();
   startTimer();
   playBGM();
-  nextWord();
-  playerWordInput.value = '';
-  playerWordInput.focus();
-
-  //hide startBtn/score
 }
 
 function gameTimeout() {
@@ -112,14 +119,12 @@ function gameTimeout() {
   targetDisplay.style.visibility = 'hidden';
   toggleModal();
   targetDisplay.classList.remove('grow');
-
 }
 
 function resetGame() {
   clearInterval(interval);
   clearTimeout(timeout);
   stopBGM();
-  
 }
 
 function playBGM() {
@@ -208,13 +213,16 @@ function fireLaser(keycode) {
 
 function flyAway() {
   engineOn();
-  spaceShip.classList.add('fly-away');
+  spaceShip.classList = 'fly-away';
+  playerWordInput.style.visibility = 'hidden';
 }
 
 function flyIn() {
   engineOn();
   spaceShip.classList = 'fly-in';
   spaceShip.style.visibility = 'visible';
+  playerWordInput.style.visibility = 'hidden';
+
 }
 
 function engineOn() {
