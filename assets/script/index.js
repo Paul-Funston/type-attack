@@ -62,6 +62,9 @@ onEvent('click', startBtn, () => {
 
 onEvent('click', restartBtn, () => {
   startGame();
+  resultModal.classList.add('hidden');
+
+  
 });
 
 onEvent('keyup', playerWordInput, function(event) {
@@ -79,6 +82,7 @@ function startGame() {
     // initializing for first play
     startBtn.innerHTML = 'Try Again';
     statusDisplay.style.visibility = 'visible';
+    restartBtn.style.visibility = 'visible';
     resultDisplay.style.backgroundImage = 'url(./assets/media/station.png)';
       //change modal result
   } else {
@@ -194,20 +198,30 @@ function toggleModal() {
 
 
 function fireLaser(keycode) {
+
   if (keycode >= 65 && keycode < 97) {
+    let color = 'rgb(255 0 0)';
+    console.log(matchCharacter())
+    if(matchCharacter()) {
+      color = 'rgb(0 255 0)'
+    };
     const shootLaser = new Audio('./assets/media/laser.mp3');
     shootLaser.type = 'audio/mp3';
     shootLaser.playbackRate = 4;
     shootLaser.play();
+
+    let laser = document.createElement("div");
+    laser.classList = "laser";
+    select('.ship-input').append(laser);
+    laser.style.backgroundColor = color;
+  
+    setTimeout(function() {
+      laser.remove();
+    }, 1000);
+
   }
 
-  let laser = document.createElement("div");
-  laser.classList = "laser";
-  select('form').append(laser);
 
-  setTimeout(function() {
-    laser.remove();
-  }, 1000);
 
 }
 
@@ -230,3 +244,16 @@ function engineOn() {
   engine.type = 'audio.mp3';
   engine.play();
 }
+
+function matchCharacter() {
+  let typedChar = playerWordInput.value.slice(-1);
+  let inputLength = playerWordInput.value.length;
+  let targetChar = target.slice(inputLength - 1, inputLength);
+  return (typedChar === targetChar);
+}
+
+onEvent('blur', playerWordInput, function() {
+  setTimeout(() => {
+    playerWordInput.focus();
+  }, 500)
+})
