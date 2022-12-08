@@ -25,7 +25,7 @@ const dictionary = ['dinosaur', 'love', 'pineapple', 'calendar', 'robot', 'build
 'keyboard', 'window'];
 
 let activeDictionary = [];
-let highscores = [];
+let sessionHighScores = [];
 
 const backgroundMusic = new Audio('./assets/media/bgm.wav');
 backgroundMusic.type = 'audio/wav';
@@ -35,7 +35,7 @@ swoosh.type = 'audio/wav';
 
 
 
-const gameTime = 99;  // How long is a round in seconds
+const gameTime = 10;  // How long is a round in seconds
 const startBtn = select('.start');
 const restartBtn = select('.restart');
 const statusDisplay = select('.status');
@@ -113,10 +113,11 @@ function activateGameElements() {
 function gameTimeout() {
   clearInterval(interval);
   let now = new Date();
-  let percentage = points / dictionary.length;
+  let percentage = (points / dictionary.length);
   let score = new Score(now, points, percentage);
   displayScore(score);
-  highscores.push(score);
+  sessionHighScores.push(score);
+  saveScore(points, percentage);
   stopBGM();
   flyAway();
 
@@ -201,7 +202,6 @@ function fireLaser(keycode) {
 
   if (keycode >= 65 && keycode < 97) {
     let color = 'rgb(255 0 0)';
-    console.log(matchCharacter())
     if(matchCharacter()) {
       color = 'rgb(0 255 0)'
     };
@@ -220,9 +220,6 @@ function fireLaser(keycode) {
     }, 1000);
 
   }
-
-
-
 }
 
 function flyAway() {
@@ -257,3 +254,44 @@ onEvent('blur', playerWordInput, function() {
     playerWordInput.focus();
   }, 500)
 })
+
+function saveScore(points, percentage) {
+  let scores = JSON.parse(localStorage.getItem('scores'));
+  let highScores;
+  let percent = Math.trunc(percentage * 100).toFixed(1);
+
+  if (scores) {
+    highScores = scores;
+  } else {
+    highScores = [];
+  }
+
+  let score = {
+    'hits': points,
+    'percent': percent,
+    'date': formatDate(new Date())
+  }
+
+  highScores.push(score);
+
+  highScores.sort((a,b) => {
+    return b.hits - a.hits;
+  })
+
+  if (highScores.length > 9) {
+    highScores = highScores.slice(0,9);
+  }
+  
+  localStorage.setItem('scores', JSON.stringify(highScores));
+}
+
+function formatDate(date) {
+  if (date instanceof Date) {
+    const options = {
+      // year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    }
+    return date.toLocaleDateString('en-ca', options);
+  }
+}
