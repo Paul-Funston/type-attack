@@ -80,6 +80,8 @@ function startGame() {
   time = gameTime;
   points = 0;
   scoreBoard.style.visibility = 'hidden';
+  scoreBoard.classList.remove('slide');
+
 
 
   if (startBtn.innerHTML === 'Start') {
@@ -329,6 +331,7 @@ function createHighScoreButton() {
 
 function showHighScores() {
   if (JSON.parse(localStorage.getItem('scores')).length > 0) {
-    scoreBoard.style.visibility === 'visible' ? scoreBoard.style.visibility = 'hidden' : scoreBoard.style.visibility = 'visible'; 
+    scoreBoard.style.visibility = 'visible'; 
+    scoreBoard.classList.toggle('slide');
   }
 }

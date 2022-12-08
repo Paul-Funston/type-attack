@@ -216,6 +216,14 @@ div.score-board {
   background-color: rgb(0 0 0 / 0.5);
   visibility: hidden;
   padding: 3rem 1rem;
+  translate: 20vw 0;
+  opacity: 0;
+  transition: all 0.5s ease;
+}
+
+.score-board.slide {
+  opacity: 1;
+  translate: none;
 }
 
 div.score-board p:first-child {
@@ -281,5 +289,3 @@ div.reveal-highscore p {
   from {translate: 0 400px;}
   to {translate: none;}
 }
-
-
