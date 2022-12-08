@@ -46,6 +46,8 @@ const playerWordInput = select('.player-word');
 const resultDisplay = select('.score');
 const resultModal = select('.result');
 const spaceShip = select('.form-ship figure');
+const scoreBoard = select('.score-board');
+
 
 let points = 0;
 let time = gameTime;
@@ -77,6 +79,8 @@ onEvent('keyup', playerWordInput, function(event) {
 function startGame() {
   time = gameTime;
   points = 0;
+  scoreBoard.style.visibility = 'hidden';
+
 
   if (startBtn.innerHTML === 'Start') {
     // initializing for first play
@@ -118,6 +122,7 @@ function gameTimeout() {
   displayScore(score);
   sessionHighScores.push(score);
   saveScore(points, percentage);
+  updateScoreBoard();
   stopBGM();
   flyAway();
 
@@ -190,6 +195,8 @@ function displayScore(score) {
   percent = Math.trunc(percent * 100);
   date = date.toDateString().slice(4, 15);
   resultDisplay.innerHTML = `<p>${hits} Hits!</p> <p>${percent}%</p>`;
+
+  resultDisplay.append(createHighScoreButton());
   resultDisplay.append(startBtn);
 }
 
@@ -258,7 +265,7 @@ onEvent('blur', playerWordInput, function() {
 function saveScore(points, percentage) {
   let scores = JSON.parse(localStorage.getItem('scores'));
   let highScores;
-  let percent = Math.trunc(percentage * 100).toFixed(1);
+  let percent = (percentage * 100).toFixed(1);
 
   if (scores) {
     highScores = scores;
@@ -293,5 +300,35 @@ function formatDate(date) {
       day: 'numeric'
     }
     return date.toLocaleDateString('en-ca', options);
+  }
+}
+
+function updateScoreBoard() {
+  let highScores = JSON.parse(localStorage.getItem('scores'));
+  scoreBoard.innerHTML = '<p>High Scores<p>';
+  if (highScores.length > 0) {
+    for (let i = 0; i < highScores.length; i++) {
+      let element = document.createElement('p');
+      element.innerText = `#${i + 1}: ${highScores[i].hits} Hits ${highScores[i].percent}%`;
+      scoreBoard.append(element);
+    }
+  }
+};
+
+
+function createHighScoreButton() {
+  let element = document.createElement('div');
+  element.classList = 'reveal-highscore';
+  element.innerHTML = '<p>Highscores</p>';
+
+  element.addEventListener('click', showHighScores);
+
+  return element;
+}
+
+
+function showHighScores() {
+  if (JSON.parse(localStorage.getItem('scores')).length > 0) {
+    scoreBoard.style.visibility === 'visible' ? scoreBoard.style.visibility = 'hidden' : scoreBoard.style.visibility = 'visible'; 
   }
 }
