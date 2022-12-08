@@ -35,7 +35,7 @@ swoosh.type = 'audio/wav';
 
 
 
-const gameTime = 10;  // How long is a round in seconds
+const gameTime = 8;  // How long is a round in seconds
 const startBtn = select('.start');
 const restartBtn = select('.restart');
 const statusDisplay = select('.status');

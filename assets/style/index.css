@@ -203,6 +203,7 @@ div.score {
 
 div.score p {
   color: rgb(var(--primary-color));
+  color: rgb(200 250 200);
 }
 
 
@@ -244,6 +245,7 @@ div.reveal-highscore {
 
 div.reveal-highscore p {
   color: white;
+  font-size: 1rem;
  
 }
 
